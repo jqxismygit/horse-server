@@ -38,6 +38,15 @@ passport.use(new Strategy(
 
 // Create a new Express application.
 let app = express();
+app.all('*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", " Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    //允许请求资源的方式
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By", ' 3.2.1');
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
 // Configure Express application.
 app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
@@ -130,7 +139,7 @@ app.post('/login', function (req, res) {
                 res.json({ _id: user._id, username: user.username, token: user.token });
             }).catch((err) => {
                 db.close();
-                res.status(403).json({ message: '登录失败' });
+                res.status(403).json({ message: '账号或密码不正确' });
             });
         });
     } else {
@@ -138,4 +147,6 @@ app.post('/login', function (req, res) {
     }
 });
 
-app.listen(8081);
+app.listen(8081, '10.0.11.193', function(){
+    
+});
